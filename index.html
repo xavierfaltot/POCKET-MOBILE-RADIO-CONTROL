@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>POCKET MOBILE RADIO CONTROL</title>
+<style>
+:root{--pink:#ff1688;--acid:#eaff00;--cream:#f5ecd8;--orange:#ff5a00;--black:#050505}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;min-height:100%;background:var(--black);color:var(--cream);font-family:Arial,Helvetica,sans-serif;overflow-x:hidden}
+body{display:flex;justify-content:center}
+#app{width:240px;min-height:282px;padding:8px;background:#050505;position:relative}
+.top{height:58px;display:flex;align-items:center;gap:7px;border-bottom:2px solid var(--pink);padding-bottom:6px}
+.logo{width:55px;height:55px;object-fit:contain;flex:none}.status{min-width:0;flex:1}.air{display:inline-block;background:var(--pink);color:#000;font-weight:900;font-size:11px;padding:4px 7px;border-radius:4px}.listeners{font-size:10px;font-weight:900;margin-top:5px}.listeners b{color:var(--acid);font-size:18px;margin-right:4px}
+.card{padding:7px 2px 6px;border-bottom:1px solid #3b3b3b;min-height:58px}.label{font-weight:900;font-size:11px;letter-spacing:.5px}.current .label{color:var(--pink)}.next .label{color:var(--acid)}.artist{font-weight:900;font-size:13px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.track{font-size:11px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#ddd}.controls{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding-top:8px}.btn{height:54px;border:0;border-radius:8px;font-size:15px;font-weight:1000;color:#000;touch-action:none}.talk{background:var(--acid)}.talk.live{background:var(--orange);color:#000}.skip{background:var(--pink)}.sub{display:block;font-size:7px;margin-top:2px}.foot{text-align:center;font-size:7px;color:#777;margin-top:5px;letter-spacing:.5px}.error{color:var(--orange)}
+@media(min-width:241px){#app{transform-origin:top center}}
+</style>
+</head>
+<body>
+<main id="app">
+  <section class="top">
+    <img class="logo" src="POCKET-MOBILE-RADIO-CONTROL_logo.png" alt="POCKET MOBILE RADIO CONTROL">
+    <div class="status">
+      <span class="air">● ON AIR</span>
+      <div class="listeners"><b id="listeners">—</b> LISTENERS</div>
+    </div>
+  </section>
+  <section class="card current"><div class="label">CURRENT</div><div class="artist" id="currentArtist">Loading…</div><div class="track" id="currentTrack">Pick Pocket Radio</div></section>
+  <section class="card next"><div class="label">NEXT</div><div class="artist" id="nextArtist">Loading…</div><div class="track" id="nextTrack">SONO PLAY MINI LIVE</div></section>
+  <section class="controls">
+    <button class="btn talk" id="talk">🎙 TALK<span class="sub">HOLD</span></button>
+    <button class="btn skip" id="skip">≫ NEXT<span class="sub">SKIP</span></button>
+  </section>
+  <div class="foot" id="foot">RABBIT r1 CANDIDATE · TEST</div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const API_BASE='https://radio.pickpocketradio.org/rabbit-test';
+function splitTitle(v){v=(v||'').trim();let p=v.split(/\s[-–—]\s/);return p.length>1?[p.shift(),p.join(' — ')]:['',v||'—']}
+async function refresh(){
+ try{
+  const r=await fetch(API_BASE+'/api/status',{cache:'no-store'}); if(!r.ok) throw Error(r.status);
+  const d=await r.json();
+  $('listeners').textContent=d.listeners ?? d.public_listeners ?? '0';
+  let c=d.current||d.now||{}; let n=d.next||{};
+  let ct=typeof c==='string'?c:(c.title||c.filename||c.name||''); let nt=typeof n==='string'?n:(n.title||n.filename||n.name||'');
+  let [ca,cs]=splitTitle(ct),[na,ns]=splitTitle(nt);
+  $('currentArtist').textContent=c.artist||ca||'ON AIR'; $('currentTrack').textContent=c.track||cs||ct||'Pick Pocket Radio';
+  $('nextArtist').textContent=n.artist||na||'NEXT'; $('nextTrack').textContent=n.track||ns||nt||'SONO queue';
+  $('foot').classList.remove('error'); $('foot').textContent='RABBIT r1 · SONO TEST';
+ }catch(e){$('foot').classList.add('error');$('foot').textContent='SONO CONNECTION…'}
+}
+async function next(){
+ $('skip').disabled=true; $('skip').textContent='…';
+ try{let r=await fetch(API_BASE+'/api/next',{method:'POST'});if(!r.ok)throw Error(r.status);setTimeout(refresh,700)}catch(e){$('foot').textContent='NEXT ERROR';$('foot').classList.add('error')}
+ setTimeout(()=>{$('skip').disabled=false;$('skip').innerHTML='≫ NEXT<span class="sub">SKIP</span>'},900)
+}
+$('skip').addEventListener('click',next);
+const talk=$('talk');
+function talkStart(e){if(e)e.preventDefault();talk.classList.add('live');talk.innerHTML='● TALK<span class="sub">MIC TEST NEXT</span>';navigator.vibrate?.(30)}
+function talkEnd(e){if(e)e.preventDefault();talk.classList.remove('live');talk.innerHTML='🎙 TALK<span class="sub">HOLD</span>'}
+['pointerdown','touchstart'].forEach(x=>talk.addEventListener(x,talkStart,{passive:false}));
+['pointerup','pointercancel','pointerleave','touchend','touchcancel'].forEach(x=>talk.addEventListener(x,talkEnd,{passive:false}));
+refresh();setInterval(refresh,5000);
+</script>
+</body>
+</html>
