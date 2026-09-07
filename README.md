@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="POCKET-MOBILE-RADIO-CONTROL_logo.png" alt="POCKET MOBILE RADIO CONTROL" width="420">
+</p>
+
 # POCKET MOBILE RADIO CONTROL
 
 **Mobile radio control for Pick Pocket Radio.**
