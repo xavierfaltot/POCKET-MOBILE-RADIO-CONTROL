@@ -1,0 +1,17 @@
+[Unit]
+Description=Pick Pocket Mobile Radio Control - TALK ingest
+After=network.target icecast2.service
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/opt/pocket-mobile-radio-control
+EnvironmentFile=/opt/pocket-mobile-radio-control/talk.env
+ExecStart=/usr/bin/python3 /opt/pocket-mobile-radio-control/backend/talk_server.py
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
