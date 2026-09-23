@@ -14,11 +14,11 @@ A minimal mobile interface for controlling and speaking into **Pick Pocket Radio
 - **NEXT** — see the upcoming track
 - **TALK** — push-to-talk voice intervention over the radio stream
 - **LISTENERS** — live audience count in a dedicated visual block
+- A large **≫ NEXT** control skips to the next track.
 
 <img width="446" height="444" alt="Capture d’écran 2026-09-23 à 20 29 15" src="https://github.com/user-attachments/assets/9152bf80-f0ed-4fb0-b29b-95a668c1cadb" />
 
 
-A large **≫ NEXT** control skips to the next track.
 
 ## Philosophy
 
