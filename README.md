@@ -13,7 +13,7 @@ A minimal mobile interface for controlling and speaking into **Pick Pocket Radio
 - **CURRENT** — see the track currently on air
 - **NEXT** — see the upcoming track
 - **TALK** — push-to-talk voice intervention over the radio stream
-- **LISTENERS** — live audience count in a dedicated visual block
+- **PREPA JINGLE** — prepare/trigger the jingle control from the mobile interface
 - A large **≫ NEXT** control skips to the next track.
 
 <img width="446" height="444" alt="Capture d’écran 2026-09-23 à 20 29 15" src="https://github.com/user-attachments/assets/9152bf80-f0ed-4fb0-b29b-95a668c1cadb" />
@@ -45,8 +45,8 @@ The first target device is the **Rabbit r1**, but the interface is device-indepe
 │ └──────────┘  └──────────┘ │
 │                            │
 │ ┌──────────┐               │
-│ │    12    │               │
-│ │LISTENERS │               │
+│ │  PREPA   │               │
+│ │  JINGLE  │               │
 │ └──────────┘               │
 └────────────────────────────┘
 ```
@@ -91,7 +91,7 @@ POCKET MOBILE RADIO CONTROL
 
 **Candidate / test phase.**
 
-The existing control prototype already provides CURRENT, NEXT, listener information, and SONO NEXT control. The next milestone is the mobile Rabbit-oriented version followed by push-to-talk audio integration.
+The existing control prototype already provides CURRENT, NEXT, PREPA JINGLE, and SONO NEXT control. The next milestone is the mobile Rabbit-oriented version followed by push-to-talk audio integration.
 
 Development is validated against a test stream before any change is promoted to the public Pick Pocket Radio stream.
 
